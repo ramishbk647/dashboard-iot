@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sensor Data Dashboard</title>
+    <style>
+        #sensorTable {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #sensorTable th, #sensorTable td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        #sensorTable th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sensor Data Dashboard</h1>
+    <table id="sensorTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Sonar</th>
+                <th>PIR</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="sensorDataBody"></tbody>
+    </table>
+
+    <script>
+        // Retrieve sensor data from DynamoDB table
+        fetch('API_ENDPOINT') // Replace 'API_ENDPOINT' with the API endpoint that fetches the sensor data
+            .then(response => response.json())
+            .then(data => {
+                // Clear the existing table rows
+                const sensorDataBody = document.getElementById('sensorDataBody');
+                sensorDataBody.innerHTML = '';
+
+                // Populate the table with sensor data
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    const idCell = document.createElement('td');
+                    const sonarCell = document.createElement('td');
+                    const pirCell = document.createElement('td');
+                    const timestampCell = document.createElement('td');
+
+                    idCell.textContent = item.ID;
+                    sonarCell.textContent = item.sonar;
+                    pirCell.textContent = item.pir;
+                    timestampCell.textContent = item.timestamp;
+
+                    row.appendChild(idCell);
+                    row.appendChild(sonarCell);
+                    row.appendChild(pirCell);
+                    row.appendChild(timestampCell);
+
+                    sensorDataBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching sensor data:', error));
+    </script>
+</body>
+</html>
